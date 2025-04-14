@@ -29,13 +29,30 @@ const getCategoryColor = (category: string) => {
   }
 };
 
+const getCategoryName = (category: string): string => {
+  switch (category) {
+    case 'financial':
+      return 'Financeiro';
+    case 'sales':
+      return 'Vendas';
+    case 'operations':
+      return 'Operações';
+    case 'hr':
+      return 'RH';
+    case 'marketing':
+      return 'Marketing';
+    default:
+      return category;
+  }
+};
+
 const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
   const { currentUser } = useAuth();
   const canAccess = report.accessRoles.includes(currentUser?.role || 'user');
   
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
+    return new Intl.DateTimeFormat('pt-BR', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
@@ -45,9 +62,9 @@ const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
   const handleDownload = () => {
     if (canAccess) {
       // In a real app, this would trigger an actual file download
-      toast.success(`Downloading "${report.title}"...`);
+      toast.success(`Baixando "${report.title}"...`);
     } else {
-      toast.error("You don't have permission to download this report");
+      toast.error("Você não tem permissão para baixar este relatório");
     }
   };
 
@@ -56,13 +73,13 @@ const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start mb-1">
           <Badge className={getCategoryColor(report.category)} variant="outline">
-            {report.category.charAt(0).toUpperCase() + report.category.slice(1)}
+            {getCategoryName(report.category)}
           </Badge>
           
           {!canAccess && (
             <Badge variant="outline" className="bg-gray-100 text-gray-500">
               <Users size={14} className="mr-1" />
-              Restricted
+              Restrito
             </Badge>
           )}
         </div>
@@ -77,7 +94,7 @@ const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
       <CardFooter className="flex items-center justify-between pt-2 border-t">
         <div className="flex items-center text-xs text-muted-foreground">
           <Calendar size={14} className="mr-1" />
-          Updated {formatDate(report.updatedAt)}
+          Atualizado {formatDate(report.updatedAt)}
         </div>
         <Button 
           size="sm" 
@@ -87,7 +104,7 @@ const ReportCard: React.FC<ReportCardProps> = ({ report }) => {
           variant={canAccess ? "default" : "outline"}
         >
           <Download size={16} className="mr-1" />
-          Download
+          Baixar
         </Button>
       </CardFooter>
     </Card>

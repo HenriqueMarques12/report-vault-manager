@@ -23,26 +23,26 @@ const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">Welcome to your report management dashboard.</p>
+        <h1 className="text-3xl font-bold tracking-tight">Painel Principal</h1>
+        <p className="text-muted-foreground">Bem-vindo ao seu painel de gerenciamento de relatórios.</p>
       </div>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Reports</CardTitle>
+            <CardTitle className="text-sm font-medium">Total de Relatórios</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{reports.length}</div>
             <p className="text-xs text-muted-foreground">
-              {accessibleReports.length} available to you
+              {accessibleReports.length} disponíveis para você
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Categories</CardTitle>
+            <CardTitle className="text-sm font-medium">Categorias</CardTitle>
             <BarChart4 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -50,13 +50,13 @@ const Dashboard: React.FC = () => {
               {new Set(reports.map(r => r.category)).size}
             </div>
             <p className="text-xs text-muted-foreground">
-              Different report types
+              Tipos diferentes de relatórios
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">User Access</CardTitle>
+            <CardTitle className="text-sm font-medium">Acesso de Usuários</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -64,31 +64,31 @@ const Dashboard: React.FC = () => {
               {reports.filter(r => r.accessRoles.includes('user')).length}
             </div>
             <p className="text-xs text-muted-foreground">
-              Reports available to regular users
+              Relatórios disponíveis para usuários comuns
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Last Updated</CardTitle>
+            <CardTitle className="text-sm font-medium">Última Atualização</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               {reports.length > 0 
                 ? new Date(Math.max(...reports.map(r => new Date(r.updatedAt).getTime())))
-                  .toLocaleDateString()
+                  .toLocaleDateString('pt-BR')
                 : '-'}
             </div>
             <p className="text-xs text-muted-foreground">
-              Date of most recent update
+              Data da atualização mais recente
             </p>
           </CardContent>
         </Card>
       </div>
 
       <div>
-        <h2 className="text-xl font-semibold tracking-tight mb-4">Recently Updated Reports</h2>
+        <h2 className="text-xl font-semibold tracking-tight mb-4">Relatórios Atualizados Recentemente</h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {recentReports.map(report => (
             <ReportCard key={report.id} report={report} />
@@ -97,7 +97,7 @@ const Dashboard: React.FC = () => {
         {recentReports.length === 0 && (
           <Card>
             <CardContent className="py-10 text-center text-muted-foreground">
-              No reports available to display.
+              Nenhum relatório disponível para exibição.
             </CardContent>
           </Card>
         )}

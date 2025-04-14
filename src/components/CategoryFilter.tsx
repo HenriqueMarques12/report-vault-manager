@@ -9,11 +9,11 @@ interface CategoryFilterProps {
 }
 
 const categories: { id: ReportCategory | 'all', label: string }[] = [
-  { id: 'all', label: 'All Reports' },
-  { id: 'financial', label: 'Financial' },
-  { id: 'sales', label: 'Sales' },
-  { id: 'operations', label: 'Operations' },
-  { id: 'hr', label: 'HR' },
+  { id: 'all', label: 'Todos os Relatórios' },
+  { id: 'financial', label: 'Financeiro' },
+  { id: 'sales', label: 'Vendas' },
+  { id: 'operations', label: 'Operações' },
+  { id: 'hr', label: 'RH' },
   { id: 'marketing', label: 'Marketing' }
 ];
 
