@@ -1,13 +1,32 @@
-// Update this page (the content is just a fallback if you fail to update the page)
 
-const Index = () => {
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { ReportProvider } from '@/contexts/ReportContext';
+import Layout from './Layout';
+import Dashboard from './Dashboard';
+import ReportList from './ReportList';
+import NotFound from './NotFound';
+import ManageReports from './admin/ManageReports';
+import ManageUsers from './admin/ManageUsers';
+import Settings from './admin/Settings';
+
+const Index: React.FC = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <AuthProvider>
+      <ReportProvider>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="reports" element={<ReportList />} />
+            <Route path="admin/reports" element={<ManageReports />} />
+            <Route path="admin/users" element={<ManageUsers />} />
+            <Route path="admin/settings" element={<Settings />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </ReportProvider>
+    </AuthProvider>
   );
 };
 
