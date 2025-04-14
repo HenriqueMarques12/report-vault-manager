@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState } from 'react';
 
 // Types
@@ -28,8 +27,8 @@ interface ReportContextType {
 const sampleReports: Report[] = [
   {
     id: '1',
-    title: 'Monthly Revenue Report',
-    description: 'Shows revenue data broken down by product category and region.',
+    title: 'Relatório de Receita Mensal',
+    description: 'Mostra dados de receita detalhados por categoria de produto e região.',
     category: 'financial',
     sqlQuery: 'SELECT * FROM revenue WHERE month = :month AND year = :year',
     createdAt: '2024-01-15T12:00:00Z',
@@ -39,8 +38,8 @@ const sampleReports: Report[] = [
   },
   {
     id: '2',
-    title: 'Customer Acquisition Metrics',
-    description: 'Analysis of customer acquisition channels and costs.',
+    title: 'Métricas de Aquisição de Clientes',
+    description: 'Análise de canais de aquisição de clientes e custos.',
     category: 'marketing',
     sqlQuery: 'SELECT channel, COUNT(customer_id) AS new_customers FROM acquisitions GROUP BY channel',
     createdAt: '2024-02-10T14:30:00Z',
@@ -50,8 +49,8 @@ const sampleReports: Report[] = [
   },
   {
     id: '3',
-    title: 'Employee Performance Review',
-    description: 'Confidential performance metrics for all employees.',
+    title: 'Avaliação de Desempenho de Funcionários',
+    description: 'Métricas confidenciais de desempenho para todos os funcionários.',
     category: 'hr',
     sqlQuery: 'SELECT e.*, p.score FROM employees e JOIN performance p ON e.id = p.employee_id',
     createdAt: '2024-03-01T10:00:00Z',
@@ -61,8 +60,8 @@ const sampleReports: Report[] = [
   },
   {
     id: '4',
-    title: 'Inventory Status Report',
-    description: 'Current inventory levels across all warehouses.',
+    title: 'Relatório de Status de Inventário',
+    description: 'Níveis atuais de inventário em todos os depósitos.',
     category: 'operations',
     sqlQuery: 'SELECT product_id, SUM(quantity) FROM inventory GROUP BY product_id',
     createdAt: '2024-03-05T11:45:00Z',
@@ -72,8 +71,8 @@ const sampleReports: Report[] = [
   },
   {
     id: '5',
-    title: 'Sales Pipeline Analysis',
-    description: 'Analysis of current sales opportunities by stage and expected revenue.',
+    title: 'Análise do Funil de Vendas',
+    description: 'Análise das oportunidades de vendas atuais por estágio e receita esperada.',
     category: 'sales',
     sqlQuery: 'SELECT stage, COUNT(*) as count, SUM(expected_revenue) FROM opportunities GROUP BY stage',
     createdAt: '2024-03-10T09:30:00Z',
@@ -83,8 +82,8 @@ const sampleReports: Report[] = [
   },
   {
     id: '6',
-    title: 'Executive Finance Summary',
-    description: 'Confidential summary of all financial metrics for executive review.',
+    title: 'Sumário Executivo Financeiro',
+    description: 'Resumo confidencial de todas as métricas financeiras para revisão executiva.',
     category: 'financial',
     sqlQuery: 'SELECT * FROM financial_summary WHERE quarter = :quarter AND year = :year',
     createdAt: '2024-03-20T08:00:00Z',
