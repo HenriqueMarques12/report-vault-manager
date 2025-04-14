@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { FileText, Loader2, LogIn } from 'lucide-react';
+import { Loader2, LogIn } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -63,9 +63,11 @@ const LoginForm: React.FC = () => {
     <Card className="w-full max-w-md mx-auto">
       <CardHeader className="text-center">
         <div className="flex justify-center mb-2">
-          <div className="bg-primary p-3 rounded-full">
-            <FileText className="h-6 w-6 text-primary-foreground" />
-          </div>
+          <img 
+            src="https://supabase.resolvenergiasolar.com/storage/v1/object/public/parceiros//Logo-resolve-1024x279.webp" 
+            alt="Central de Relatórios" 
+            className="h-16 w-auto object-contain"
+          />
         </div>
         <CardTitle className="text-2xl">Central de Relatórios</CardTitle>
         <CardDescription>Entre para acessar seus relatórios</CardDescription>

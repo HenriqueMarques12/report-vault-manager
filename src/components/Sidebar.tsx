@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   ChevronLeft, 
-  FileText, 
   Home, 
   Settings, 
   Users, 
@@ -53,8 +52,11 @@ const Sidebar: React.FC = () => {
     >
       <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
         <div className={cn("flex items-center gap-2", isCollapsed && "hidden")}>
-          <FileText size={24} className="text-sidebar-foreground" />
-          <h1 className="text-sidebar-foreground font-bold">Central de Relatórios</h1>
+          <img 
+            src="https://supabase.resolvenergiasolar.com/storage/v1/object/public/parceiros//Logo-resolve-1024x279.webp" 
+            alt="Central de Relatórios" 
+            className="h-10 w-auto object-contain"
+          />
         </div>
         <button 
           className="p-1 rounded-lg hover:bg-sidebar-accent text-sidebar-foreground"
