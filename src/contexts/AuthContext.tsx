@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Types
+// Tipos
 export type UserRole = 'admin' | 'user';
 
 export interface User {
@@ -9,6 +9,17 @@ export interface User {
   name: string;
   email: string;
   role: UserRole;
+  provider?: 'email' | 'microsoft';
+}
+
+export interface LogEntry {
+  id: string;
+  userId: string;
+  userName: string;
+  action: string;
+  resourceId?: string;
+  resourceName?: string;
+  timestamp: Date;
 }
 
 interface AuthContextType {
@@ -16,64 +27,178 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isAdmin: boolean;
   login: (email: string, password: string) => Promise<void>;
+  loginWithMicrosoft: () => Promise<void>;
   logout: () => void;
+  logs: LogEntry[];
+  addLogEntry: (action: string, resourceId?: string, resourceName?: string) => void;
 }
 
-// Mock users for demo
+// Usuários de exemplo para demonstração
 const mockUsers: User[] = [
   {
     id: '1',
-    name: 'Admin User',
-    email: 'admin@example.com',
+    name: 'Administrador',
+    email: 'admin@exemplo.com.br',
     role: 'admin',
+    provider: 'email'
   },
   {
     id: '2',
-    name: 'Regular User',
-    email: 'user@example.com',
+    name: 'Usuário Comum',
+    email: 'usuario@exemplo.com.br',
     role: 'user',
+    provider: 'email'
+  },
+  {
+    id: '3',
+    name: 'Usuário Microsoft',
+    email: 'microsoft@outlook.com',
+    role: 'user',
+    provider: 'microsoft'
   }
 ];
 
-// Create context
+// Logs de exemplo para demonstração
+const initialLogs: LogEntry[] = [
+  {
+    id: '1',
+    userId: '1',
+    userName: 'Administrador',
+    action: 'Login no sistema',
+    timestamp: new Date(Date.now() - 86400000)
+  },
+  {
+    id: '2',
+    userId: '1',
+    userName: 'Administrador',
+    action: 'Adição de relatório',
+    resourceId: '5',
+    resourceName: 'Relatório Financeiro Q1',
+    timestamp: new Date(Date.now() - 72000000)
+  },
+  {
+    id: '3',
+    userId: '2',
+    userName: 'Usuário Comum',
+    action: 'Visualização de relatório',
+    resourceId: '2',
+    resourceName: 'Relatório de Vendas',
+    timestamp: new Date(Date.now() - 43200000)
+  }
+];
+
+// Criar contexto
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [logs, setLogs] = useState<LogEntry[]>(initialLogs);
+  
   const isAuthenticated = !!currentUser;
   const isAdmin = currentUser?.role === 'admin';
 
   useEffect(() => {
-    // Check for saved user in localStorage
+    // Verificar usuário salvo no localStorage
     const savedUser = localStorage.getItem('reportVaultUser');
     if (savedUser) {
       setCurrentUser(JSON.parse(savedUser));
     }
+    
+    // Verificar logs salvos no localStorage
+    const savedLogs = localStorage.getItem('reportVaultLogs');
+    if (savedLogs) {
+      setLogs(JSON.parse(savedLogs));
+    }
   }, []);
 
   const login = async (email: string, password: string): Promise<void> => {
-    // In a real application, this would be an API call
-    // For demo purposes, we'll use mock data
+    // Em uma aplicação real, isso seria uma chamada de API
+    // Para fins de demonstração, usaremos dados simulados
     return new Promise((resolve, reject) => {
-      // Simulate API delay
+      // Simular atraso da API
       setTimeout(() => {
         const user = mockUsers.find(user => user.email.toLowerCase() === email.toLowerCase());
         
         if (user) {
-          // In a real app, we'd check the password here
+          // Em um app real, verificaríamos a senha aqui
           setCurrentUser(user);
           localStorage.setItem('reportVaultUser', JSON.stringify(user));
+          
+          const newLog: LogEntry = {
+            id: `log_${Date.now()}`,
+            userId: user.id,
+            userName: user.name,
+            action: 'Login no sistema',
+            timestamp: new Date()
+          };
+          
+          const updatedLogs = [...logs, newLog];
+          setLogs(updatedLogs);
+          localStorage.setItem('reportVaultLogs', JSON.stringify(updatedLogs));
+          
           resolve();
         } else {
-          reject(new Error('Invalid email or password'));
+          reject(new Error('Email ou senha inválidos'));
+        }
+      }, 800);
+    });
+  };
+  
+  const loginWithMicrosoft = async (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      // Em uma aplicação real, isso redirecionaria para a página de autenticação da Microsoft
+      // Para fins de demonstração, simulamos o login bem-sucedido com o usuário Microsoft
+      setTimeout(() => {
+        const microsoftUser = mockUsers.find(user => user.provider === 'microsoft');
+        
+        if (microsoftUser) {
+          setCurrentUser(microsoftUser);
+          localStorage.setItem('reportVaultUser', JSON.stringify(microsoftUser));
+          
+          const newLog: LogEntry = {
+            id: `log_${Date.now()}`,
+            userId: microsoftUser.id,
+            userName: microsoftUser.name,
+            action: 'Login via Microsoft',
+            timestamp: new Date()
+          };
+          
+          const updatedLogs = [...logs, newLog];
+          setLogs(updatedLogs);
+          localStorage.setItem('reportVaultLogs', JSON.stringify(updatedLogs));
+          
+          resolve();
+        } else {
+          reject(new Error('Falha ao autenticar com Microsoft'));
         }
       }, 800);
     });
   };
 
+  const addLogEntry = (action: string, resourceId?: string, resourceName?: string) => {
+    if (!currentUser) return;
+    
+    const newLog: LogEntry = {
+      id: `log_${Date.now()}`,
+      userId: currentUser.id,
+      userName: currentUser.name,
+      action,
+      resourceId,
+      resourceName,
+      timestamp: new Date()
+    };
+    
+    const updatedLogs = [...logs, newLog];
+    setLogs(updatedLogs);
+    localStorage.setItem('reportVaultLogs', JSON.stringify(updatedLogs));
+  };
+
   const logout = () => {
-    setCurrentUser(null);
-    localStorage.removeItem('reportVaultUser');
+    if (currentUser) {
+      addLogEntry('Logout do sistema');
+      setCurrentUser(null);
+      localStorage.removeItem('reportVaultUser');
+    }
   };
 
   const value = {
@@ -81,7 +206,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAuthenticated,
     isAdmin,
     login,
+    loginWithMicrosoft,
     logout,
+    logs,
+    addLogEntry
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -90,7 +218,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
   }
   return context;
 };

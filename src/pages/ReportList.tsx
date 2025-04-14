@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useReports, ReportCategory } from '@/contexts/ReportContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -11,22 +11,28 @@ const ReportList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ReportCategory | 'all'>('all');
   const { reports } = useReports();
-  const { currentUser } = useAuth();
+  const { currentUser, addLogEntry } = useAuth();
 
-  // Filter reports by category, search query, and user access
+  // Registrar visualização da página
+  useEffect(() => {
+    addLogEntry('Visualizou página de relatórios');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Filtrar relatórios por categoria, termo de pesquisa e acesso do usuário
   const filteredReports = useMemo(() => {
     return reports.filter(report => {
-      // Check user access
+      // Verificar acesso do usuário
       if (!report.accessRoles.includes(currentUser?.role || 'user')) {
         return false;
       }
       
-      // Check category filter
+      // Verificar filtro por categoria
       if (selectedCategory !== 'all' && report.category !== selectedCategory) {
         return false;
       }
       
-      // Check search query
+      // Verificar termo de pesquisa
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         return (
@@ -42,8 +48,8 @@ const ReportList: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Reports</h1>
-        <p className="text-muted-foreground">Browse and download available reports.</p>
+        <h1 className="text-3xl font-bold tracking-tight">Relatórios</h1>
+        <p className="text-muted-foreground">Navegue e baixe os relatórios disponíveis.</p>
       </div>
       
       <div className="flex flex-col sm:flex-row gap-4">
@@ -51,7 +57,7 @@ const ReportList: React.FC = () => {
           <SearchBar
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Search reports..."
+            placeholder="Buscar relatórios..."
           />
         </div>
         <div className="flex-1 overflow-auto">
@@ -72,8 +78,8 @@ const ReportList: React.FC = () => {
         <Card>
           <CardContent className="py-10 text-center text-muted-foreground">
             {searchQuery || selectedCategory !== 'all' 
-              ? "No reports match your filters. Try adjusting your search criteria."
-              : "No reports available. Contact an administrator for more information."}
+              ? "Nenhum relatório corresponde aos seus filtros. Tente ajustar seus critérios de busca."
+              : "Nenhum relatório disponível. Entre em contato com um administrador para mais informações."}
           </CardContent>
         </Card>
       )}

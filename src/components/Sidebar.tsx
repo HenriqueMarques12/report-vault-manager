@@ -8,7 +8,8 @@ import {
   Settings, 
   Users, 
   FolderOpen, 
-  LogOut
+  LogOut,
+  ScrollText
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
@@ -53,7 +54,7 @@ const Sidebar: React.FC = () => {
       <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
         <div className={cn("flex items-center gap-2", isCollapsed && "hidden")}>
           <FileText size={24} className="text-sidebar-foreground" />
-          <h1 className="text-sidebar-foreground font-bold">Report Vault</h1>
+          <h1 className="text-sidebar-foreground font-bold">Central de Relatórios</h1>
         </div>
         <button 
           className="p-1 rounded-lg hover:bg-sidebar-accent text-sidebar-foreground"
@@ -67,40 +68,47 @@ const Sidebar: React.FC = () => {
         <SidebarLink 
           to="/" 
           icon={<Home />} 
-          label="Dashboard" 
+          label="Início" 
           isCollapsed={isCollapsed} 
           isActive={location.pathname === '/'}
         />
         <SidebarLink 
           to="/reports" 
           icon={<FolderOpen />} 
-          label="Reports" 
+          label="Relatórios" 
           isCollapsed={isCollapsed}
           isActive={location.pathname.startsWith('/reports')}
+        />
+        <SidebarLink 
+          to="/logs" 
+          icon={<ScrollText />} 
+          label="Registros de Acesso" 
+          isCollapsed={isCollapsed}
+          isActive={location.pathname.startsWith('/logs')}
         />
         {isAdmin && (
           <>
             <div className={cn("mt-2 mb-1 px-3 text-xs text-sidebar-foreground/50", isCollapsed && "hidden")}>
-              Admin
+              Administrador
             </div>
             <SidebarLink 
               to="/admin/reports" 
               icon={<FileText />} 
-              label="Manage Reports" 
+              label="Gerenciar Relatórios" 
               isCollapsed={isCollapsed} 
               isActive={location.pathname.startsWith('/admin/reports')}
             />
             <SidebarLink 
               to="/admin/users" 
               icon={<Users />} 
-              label="Users" 
+              label="Usuários" 
               isCollapsed={isCollapsed}
               isActive={location.pathname.startsWith('/admin/users')}
             />
             <SidebarLink 
               to="/admin/settings" 
               icon={<Settings />} 
-              label="Settings" 
+              label="Configurações" 
               isCollapsed={isCollapsed}
               isActive={location.pathname.startsWith('/admin/settings')}
             />
@@ -120,7 +128,7 @@ const Sidebar: React.FC = () => {
           className="flex items-center gap-3 w-full p-3 rounded-lg text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground transition-colors"
         >
           <LogOut size={20} />
-          {!isCollapsed && <span>Logout</span>}
+          {!isCollapsed && <span>Sair</span>}
         </button>
       </div>
     </aside>

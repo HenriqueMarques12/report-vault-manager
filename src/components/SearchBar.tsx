@@ -12,7 +12,7 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ 
   value, 
   onChange, 
-  placeholder = "Search reports..." 
+  placeholder = "Buscar relatórios..." 
 }) => {
   return (
     <div className="relative">
